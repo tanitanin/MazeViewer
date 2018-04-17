@@ -28,6 +28,8 @@ namespace MazeViewer
 
         public List<string> MazeFileList { get; } = new List<string>();
 
+        public bool EnableMark { get; set; } = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -43,21 +45,40 @@ namespace MazeViewer
 
         private void DataSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var combo = sender as ComboBox;
-            var path = MazeFileList[combo.SelectedIndex];
-            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
-            {
-                var data = new byte[stream.Length];
-                stream.Read(data, 0, data.Length);
-                Maze = Maze.Load(data);
-                stream.Close();
-            }
+            UpdateMaze();
+        }
 
-            var flg = Maze.Validate();
-            var canvas = Maze.ToCanvas();
-            Presenter.Content = Maze.ToCanvas();
-            Presenter.Width = canvas.Width;
-            Presenter.Height = canvas.Height;
+        private void UpdateMaze()
+        {
+            if(MazeFileList.Count > 0)
+            {
+                var path = MazeFileList[DataSelector.SelectedIndex];
+                using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
+                {
+                    var data = new byte[stream.Length];
+                    stream.Read(data, 0, data.Length);
+                    Maze = Maze.Load(data);
+                    stream.Close();
+                }
+
+                var flg = Maze.Validate();
+                var canvas = Maze.ToCanvas();
+                Presenter.Content = Maze.ToCanvas(EnableMark);
+                Presenter.Width = canvas.Width;
+                Presenter.Height = canvas.Height;
+            }
+        }
+
+        private void ShowMarkCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            EnableMark = true;
+            UpdateMaze();
+        }
+
+        private void ShowMarkCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            EnableMark = false;
+            UpdateMaze();
         }
     }
 }

@@ -12,6 +12,8 @@ namespace MazeViewer.Models
         public bool East { get; set; } = false;
         public bool West { get; set; } = false;
         public bool South { get; set; } = false;
+        public bool IsStart { get; set; } = false;
+        public bool IsGoal { get; set; } = false;
     }
 
     public partial class Maze
@@ -23,7 +25,7 @@ namespace MazeViewer.Models
 
         public static Maze Load(byte[] bytes)
         {
-            return new Maze()
+            var maze = new Maze()
             {
                 Size = (int)Math.Sqrt(bytes.Count()),
                 Cells = bytes.Select(b => new Cell {
@@ -31,8 +33,20 @@ namespace MazeViewer.Models
                     East = (b & 0x02) > 0,
                     West = (b & 0x08) > 0,
                     South = (b & 0x04) > 0,
-                }).ToList()
+                    IsStart = (b & 0x10) > 0,
+                    IsGoal = (b & 0x20) > 0,
+                }).ToList(),
             };
+            maze.At(0, 0).IsStart = true;
+            if(maze.Cells.Where(x => x.IsGoal).Count() < 1)
+            {
+                var n = maze.Size / 2;
+                maze.At(n-1, n-1).IsGoal = true;
+                maze.At(n-1, n  ).IsGoal = true;
+                maze.At(n  , n-1).IsGoal = true;
+                maze.At(n  , n  ).IsGoal = true;
+            }
+            return maze;
         }
 
         public bool Validate()

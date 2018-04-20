@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MazeViewer.Models
 {
@@ -14,6 +15,7 @@ namespace MazeViewer.Models
         public bool South { get; set; } = false;
         public bool IsStart { get; set; } = false;
         public bool IsGoal { get; set; } = false;
+        public Point Pos { get; set; }
     }
 
     public partial class Maze
@@ -22,6 +24,9 @@ namespace MazeViewer.Models
         public List<Cell> Cells { get; private set; } = new List<Cell>();
 
         public Cell At(int x, int y) => Cells[x*Size+ y];
+
+        public Cell Start { get => Cells.Where(c => c.IsStart).First(); }
+        public IEnumerable<Cell> Goals { get => Cells.Where(c => c.IsGoal); }
 
         public static Maze Load(byte[] bytes)
         {
@@ -45,6 +50,13 @@ namespace MazeViewer.Models
                 maze.At(n-1, n  ).IsGoal = true;
                 maze.At(n  , n-1).IsGoal = true;
                 maze.At(n  , n  ).IsGoal = true;
+            }
+            for(int x = 0; x < maze.Size; ++x)
+            {
+                for (int y = 0; y < maze.Size; ++y)
+                {
+                    maze.At(x, y).Pos = new Point() { X = x, Y = y };
+                }
             }
             return maze;
         }

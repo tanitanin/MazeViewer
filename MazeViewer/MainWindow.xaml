@@ -21,6 +21,7 @@
         <Grid Grid.Row="0" Grid.Column="0" Margin="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <ComboBox Name="DataSelector" Grid.Column="0"
@@ -29,8 +30,16 @@
                       Margin="10,0,10,0" VerticalAlignment="Center" IsChecked="True"
                       Checked="ShowMarkCheckBox_Checked"
                       Unchecked="ShowMarkCheckBox_Unchecked"/>
+            <Button Name="CalcButton" Grid.Column="2" Content="Calculate"
+                    Click="CalcButton_Click"/>
         </Grid>
         <ContentPresenter Name="Presenter" Grid.Row="1" Grid.Column="0" Margin="5"
+                          VerticalAlignment="Top" HorizontalAlignment="Left" Grid.RowSpan="2">
+            <ContentPresenter.RenderTransform>
+                <ScaleTransform ScaleX="2" ScaleY="2"/>
+            </ContentPresenter.RenderTransform>
+        </ContentPresenter>
+        <ContentPresenter Name="GraphPresenter" Grid.Row="1" Grid.Column="0" Margin="5"
                           VerticalAlignment="Top" HorizontalAlignment="Left" Grid.RowSpan="2">
             <ContentPresenter.RenderTransform>
                 <ScaleTransform ScaleX="2" ScaleY="2"/>

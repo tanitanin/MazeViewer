@@ -25,6 +25,7 @@ namespace MazeViewer
     {
 
         public Maze Maze { get; private set; } = new Maze();
+        public Graph Graph { get; private set; } = null;
 
         public List<string> MazeFileList { get; } = new List<string>();
 
@@ -36,7 +37,7 @@ namespace MazeViewer
             this.Loaded += MainWindow_Loaded;
         }
 
-        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             MazeFileList.AddRange(Directory.EnumerateFiles(@"MazeData").ToList());
             DataSelector.ItemsSource = MazeFileList.Select(x => System.IO.Path.GetFileName(x));
@@ -45,7 +46,7 @@ namespace MazeViewer
 
         private void DataSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            UpdateMaze();
+            Update();
         }
 
         private void UpdateMaze()
@@ -62,23 +63,49 @@ namespace MazeViewer
                 }
 
                 var flg = Maze.Validate();
-                var canvas = Maze.ToCanvas();
-                Presenter.Content = Maze.ToCanvas(EnableMark);
-                Presenter.Width = canvas.Width;
-                Presenter.Height = canvas.Height;
+                var canvas = Maze.ToCanvas(EnableMark);
+                Presenter.Content = canvas;
+            }
+        }
+
+        private void UpdateGraph()
+        {
+            if (Graph != null)
+            {
+                var canvas = Graph.ToCanvas(Maze);
+                GraphPresenter.Content = canvas;
+                GraphPresenter.Content = new TextBlock() { Text = "sadfasfhaslkjfhask" };
             }
         }
 
         private void ShowMarkCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             EnableMark = true;
-            UpdateMaze();
+            Update();
         }
 
         private void ShowMarkCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             EnableMark = false;
+            Update();
+        }
+
+        private void CalcButton_Click(object sender, RoutedEventArgs e)
+        {
+            var graph = Maze.ToGraph();
+            if(graph != null)
+            {
+                var start = graph.Nodes.Where(n => n.Cell == Maze.Start)?.First() ?? null;
+                var goal = graph.Nodes.Where(n => n.Cell == Maze.Goals.First())?.First() ?? null;
+                Graph = graph.MinimumPath(start, goal);
+                UpdateGraph();
+            }
+        }
+
+        private void Update()
+        {
             UpdateMaze();
+            UpdateGraph();
         }
     }
 }

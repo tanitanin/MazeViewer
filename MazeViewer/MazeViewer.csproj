@@ -62,6 +62,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helpers\GraphExtension.cs" />
     <Compile Include="Helpers\MazeExtension.cs" />
     <Compile Include="Helpers\MazeToCanvasConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -70,7 +71,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Edge.cs" />
+    <Compile Include="Models\Graph.cs" />
     <Compile Include="Models\Maze.cs" />
+    <Compile Include="Models\Node.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

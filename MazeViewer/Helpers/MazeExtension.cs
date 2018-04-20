@@ -15,8 +15,8 @@ namespace MazeViewer.Helpers
     {
         static Color BaseColor = Colors.DarkSlateGray;
         static Color WallTopColor = Colors.Red;
-        static double WallWidth = 1.0;
-        static double CellWidth = 10.0;
+        public static double WallWidth { get; } = 1.0;
+        public static double CellWidth { get; } = 10.0;
 
         public static Canvas ToCanvas(this Maze maze, bool showMark = false)
         {
@@ -78,5 +78,46 @@ namespace MazeViewer.Helpers
         private static Point GetNorthEast(int x, int y, int n) => new Point { X= (x + 1) * CellWidth, Y = (n - y - 1) * CellWidth };
         private static Point GetSouthEast(int x, int y, int n) => new Point { X = (x + 1) * CellWidth, Y = (n - y) * CellWidth };
         private static Point GetSouthWest(int x, int y, int n) => new Point { X = x * CellWidth, Y = (n - y) * CellWidth };
+        
+        public static Graph ToGraph(this Maze maze)
+        {
+            var graph = new Graph()
+            {
+                Nodes = new List<Node>(),
+                Edges = new List<Edge>(),
+            };
+            var nodes = new Dictionary<Cell,Node>();
+            
+            for (int x = 0; x < maze.Size; ++x)
+            {
+                for (int y = 0; y < maze.Size; ++y)
+                {
+                    var cell = maze.At(x, y);
+                    var node = new Node() { Cell = cell, Incidents = new List<Edge>() };
+                    nodes.Add(cell, node);
+                }
+            }
+            graph.Nodes.AddRange(nodes.Values);
+
+            var edges = graph.Edges;
+
+            for (int x = 0; x < maze.Size; ++x)
+            {
+                for (int y = 0; y < maze.Size; ++y)
+                {
+                    var cell = maze.At(x, y);
+                    
+                    var incidents = nodes[cell].Incidents;
+                    if (!cell.East)  incidents.Add(new Edge() { Start = nodes[cell], End = nodes[maze.At(x + 1, y)] });
+                    if (!cell.West)  incidents.Add(new Edge() { Start = nodes[cell], End = nodes[maze.At(x - 1, y)] });
+                    if (!cell.North) incidents.Add(new Edge() { Start = nodes[cell], End = nodes[maze.At(x, y + 1)] });
+                    if (!cell.South) incidents.Add(new Edge() { Start = nodes[cell], End = nodes[maze.At(x, y - 1)] });
+
+                    foreach (var e in incidents) edges.Add(e);
+                }
+            }
+
+            return graph;
+        }
     }
 }

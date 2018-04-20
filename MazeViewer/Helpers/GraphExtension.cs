@@ -41,6 +41,29 @@ namespace MazeViewer.Helpers
                         StrokeThickness = 1.0,
                     });
                 }
+
+                foreach(var node in graph.Nodes.Where(n => n.Incidents.Count() == 0))
+                {
+                    var center = GetCenter(maze, node.Cell);
+                    canvas.Children.Add(new Line()
+                    {
+                        X1 = center.X + 5,
+                        Y1 = center.Y + 5,
+                        X2 = center.X - 5,
+                        Y2 = center.Y - 5,
+                        Stroke = new SolidColorBrush(Colors.Red),
+                        StrokeThickness = 1.0,
+                    });
+                    canvas.Children.Add(new Line()
+                    {
+                        X1 = center.X + 5,
+                        Y1 = center.Y - 5,
+                        X2 = center.X - 5,
+                        Y2 = center.Y + 5,
+                        Stroke = new SolidColorBrush(Colors.Red),
+                        StrokeThickness = 1.0,
+                    });
+                }
             });
 
             return canvas;

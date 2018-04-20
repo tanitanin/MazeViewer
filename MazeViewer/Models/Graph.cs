@@ -16,6 +16,27 @@ namespace MazeViewer.Models
     {
         public static Graph GetMinimumPath(this Graph graph, Node start, Node goal)
         {
+            // pre
+            bool flg = true;
+            while (flg)
+            {
+                flg = false;
+                foreach (var node in graph.Nodes.Where(n => !n.Cell.IsStart && n.Incidents.Count()==1))
+                {
+                    flg = true;
+                    foreach (var e in graph.Edges.Where(e => e.End == node))
+                    {
+                        e.Start.Incidents.Remove(e);
+                    }
+                    foreach (var e in node.Incidents)
+                    {
+                        graph.Edges.Remove(e);
+                    }
+                    node.Incidents.Clear();
+                }
+            }
+
+            // BFS
             var visited = graph.Nodes.ToDictionary(x => x, x => false);
             var prev = graph.Nodes.ToDictionary(x => x, x => null as Edge);
             
@@ -56,6 +77,8 @@ namespace MazeViewer.Models
 
             path.Nodes.Reverse();
             path.Edges.Reverse();
+
+            path.Nodes.AddRange(graph.Nodes.Where(n => n.Incidents.Count() == 0));
 
             return path;
         }

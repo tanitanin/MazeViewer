@@ -11,15 +11,15 @@ using System.Windows.Shapes;
 
 namespace MazeViewer.Helpers
 {
-    public class MazeToCanvasConverter : IValueConverter
+    public class GraphToCanvasConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             switch(value)
             {
-                case Maze maze:
-                    var markEnabled = MainWindow.Current?.ViewModel.MarkEnabled;
-                    return markEnabled.HasValue ? maze.ToCanvas(markEnabled.Value) : maze.ToCanvas();
+                case Graph graph:
+                    var maze = MainWindow.Current?.ViewModel.Maze;
+                    return maze != null ? graph.ToCanvas(maze) : null;
                 default: return null;
             }
         }

@@ -8,7 +8,9 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
+        <helpers:PathToFileNameConverter x:Key="PathToFileNameConverter"/>
         <helpers:MazeToCanvasConverter x:Key="MazeToCanvasConverter"/>
+        <helpers:GraphToCanvasConverter x:Key="GraphToCanvasConverter"/>
     </Window.Resources>
     <Grid Background="LightGray">
         <Grid.RowDefinitions>
@@ -25,22 +27,27 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <ComboBox Name="DataSelector" Grid.Column="0"
+                      ItemsSource="{Binding MazeFileList, Converter={StaticResource PathToFileNameConverter}, Mode=OneWay}"
+                      SelectedIndex="{Binding SelectedMazeFileIndex, Mode=TwoWay}"
                       SelectionChanged="DataSelector_SelectionChanged"/>
             <CheckBox Name="ShowMarkCheckBox" Grid.Column="1"
-                      Margin="10,0,10,0" VerticalAlignment="Center" IsChecked="True"
+                      Margin="10,0,10,0" VerticalAlignment="Center"
+                      IsChecked="{Binding MarkEnabled, Mode=TwoWay}"
                       Checked="ShowMarkCheckBox_Checked"
                       Unchecked="ShowMarkCheckBox_Unchecked"/>
             <Button Name="CalcButton" Grid.Column="2" Content="Calculate"
                     Click="CalcButton_Click"/>
         </Grid>
         <ContentPresenter Name="Presenter" Grid.Row="1" Grid.Column="0" Margin="5"
-                          VerticalAlignment="Top" HorizontalAlignment="Left" Grid.RowSpan="2">
+                          VerticalAlignment="Top" HorizontalAlignment="Left" Grid.RowSpan="2"
+                          Content="{Binding Maze, Converter={StaticResource MazeToCanvasConverter}, Mode=OneWay}">
             <ContentPresenter.RenderTransform>
                 <ScaleTransform ScaleX="2" ScaleY="2"/>
             </ContentPresenter.RenderTransform>
         </ContentPresenter>
         <ContentPresenter Name="GraphPresenter" Grid.Row="1" Grid.Column="0" Margin="5"
-                          VerticalAlignment="Top" HorizontalAlignment="Left" Grid.RowSpan="2">
+                          VerticalAlignment="Top" HorizontalAlignment="Left" Grid.RowSpan="2"
+                          Content="{Binding Graph, Converter={StaticResource GraphToCanvasConverter}, Mode=OneWay}">
             <ContentPresenter.RenderTransform>
                 <ScaleTransform ScaleX="2" ScaleY="2"/>
             </ContentPresenter.RenderTransform>

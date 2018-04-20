@@ -18,37 +18,38 @@ namespace MazeViewer.Helpers
 
         public static Canvas ToCanvas(this Graph graph, Maze maze)
         {
+            if (maze == null) return null;
+
             var canvas = new Canvas();
-            canvas.Width = maze.Size * 10;
-            canvas.Height = maze.Size * 10;
 
-            //foreach (var node in graph.Nodes)
-            //{
-            //    canvas.Children.Add(new Ellipse()
-            //    {
-                    
-            //    });
-            //}
-
-            foreach (var edge in graph.Edges)
+            MainWindow.Current.Dispatcher.Invoke(() =>
             {
-                var start = GetCenter(maze, edge.Start.Cell);
-                var end = GetCenter(maze, edge.Start.Cell);
-                canvas.Children.Add(new Line()
+                canvas.Width = maze.Size * 10;
+                canvas.Height = maze.Size * 10;
+
+                foreach (var edge in graph.Edges)
                 {
-                    X1 = start.X,
-                    Y1 = start.Y,
-                    X2 = end.X,
-                    Y2 = end.Y,
-                    Stroke = new SolidColorBrush(EdgeColor),
-                    StrokeThickness = 1.0,
-                });
-            }
+                    var start = GetCenter(maze, edge.Start.Cell);
+                    var end = GetCenter(maze, edge.End.Cell);
+                    canvas.Children.Add(new Line()
+                    {
+                        X1 = start.X,
+                        Y1 = start.Y,
+                        X2 = end.X,
+                        Y2 = end.Y,
+                        Stroke = new SolidColorBrush(EdgeColor),
+                        StrokeThickness = 1.0,
+                    });
+                }
+            });
 
             return canvas;
         }
 
-        private static Point GetCenter(Maze maze, Cell cell) => new Point { X = (double)cell.Pos.X * MazeExtension.CellWidth + (MazeExtension.CellWidth / 2), Y = (double)(maze.Size - cell.Pos.Y) * MazeExtension.CellWidth + (MazeExtension.CellWidth / 2) };
+        private static Point GetCenter(Maze maze, Cell cell) => new Point {
+            X = (double)cell.Pos.X * MazeExtension.CellWidth + (MazeExtension.CellWidth / 2),
+            Y = (double)(maze.Size - cell.Pos.Y) * MazeExtension.CellWidth - (MazeExtension.CellWidth / 2),
+        };
 
     }
 }

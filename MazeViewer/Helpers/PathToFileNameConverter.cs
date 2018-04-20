@@ -1,26 +1,26 @@
-﻿using MazeViewer.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Shapes;
 
 namespace MazeViewer.Helpers
 {
-    public class MazeToCanvasConverter : IValueConverter
+    public class PathToFileNameConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            switch(value)
+            switch (value)
             {
-                case Maze maze:
-                    var markEnabled = MainWindow.Current?.ViewModel.MarkEnabled;
-                    return markEnabled.HasValue ? maze.ToCanvas(markEnabled.Value) : maze.ToCanvas();
-                default: return null;
+                case string path:
+                    return Path.GetFileName(path);
+                case IEnumerable<string> paths:
+                    return paths.Select(p => Path.GetFileName(p)).ToList();
+                default:
+                    return null;
             }
         }
 

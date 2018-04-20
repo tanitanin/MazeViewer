@@ -14,11 +14,11 @@ namespace MazeViewer.Models
 
     public static class GraphAlgorithm
     {
-        public static Graph MinimumPath(this Graph graph, Node start, Node goal)
+        public static Graph GetMinimumPath(this Graph graph, Node start, Node goal)
         {
             var visited = graph.Nodes.ToDictionary(x => x, x => false);
             var prev = graph.Nodes.ToDictionary(x => x, x => null as Edge);
-
+            
             var queue = new Queue<Node>();
             visited[start] = true;
             queue.Enqueue(start);
@@ -46,8 +46,9 @@ namespace MazeViewer.Models
             if (prev[goal] == null) return null;
 
             var path = new Graph() { Nodes = new List<Node>(), Edges = new List<Edge>() };
-            for(var n = goal; prev[n].Start != start; n = prev[n].Start)
+            for(var n = goal; prev[n] != null; n = prev[n].Start)
             {
+                if (prev[n].Start.Cell.IsGoal) continue;
                 path.Nodes.Add(n);
                 path.Edges.Add(prev[n]);
             }

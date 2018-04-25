@@ -30,6 +30,9 @@ namespace MazeViewer.ViewModels
 
         public bool MarkEnabled { get; set; } = true;
 
+        public double scale = 1.0;
+        public double Scale { get => this.scale; set => SetValue(ref this.scale, value); }
+
         private bool initialized = false;
         public void InitializeData()
         {

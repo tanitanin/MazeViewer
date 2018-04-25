@@ -17,11 +17,9 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <Grid Grid.Row="0" Grid.Column="0" Margin="5">
+        <Grid Grid.Row="0" Margin="5">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
@@ -30,27 +28,35 @@
                       ItemsSource="{Binding MazeFileList, Converter={StaticResource PathToFileNameConverter}, Mode=OneWay}"
                       SelectedIndex="{Binding SelectedMazeFileIndex, Mode=TwoWay}"
                       SelectionChanged="DataSelector_SelectionChanged"/>
-            <CheckBox Name="ShowMarkCheckBox" Grid.Column="1"
-                      Margin="10,0,10,0" VerticalAlignment="Center"
+        </Grid>
+        <Grid Grid.Row="1" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Viewbox Grid.Column="0" Margin="5,5,10,0" Stretch="Uniform"
+                     VerticalAlignment="Top" HorizontalAlignment="Left">
+                <Canvas Width="160" Height="160">
+                    <ContentPresenter Name="Presenter"  
+                        VerticalAlignment="Top" HorizontalAlignment="Left"
+                        Content="{Binding Maze, Converter={StaticResource MazeToCanvasConverter}, Mode=OneWay}"/>
+                    <ContentPresenter Name="GraphPresenter"
+                        VerticalAlignment="Top" HorizontalAlignment="Left"
+                        Content="{Binding Graph, Converter={StaticResource GraphToCanvasConverter}, Mode=OneWay}"/>
+                </Canvas>
+                <VisualStateManager.VisualStateGroups/>
+            </Viewbox>
+            <StackPanel Grid.Column="1" Margin="5" Orientation="Vertical">
+                <CheckBox Name="ShowMarkCheckBox"
+                      VerticalAlignment="Center"
                       IsChecked="{Binding MarkEnabled, Mode=TwoWay}"
                       Checked="ShowMarkCheckBox_Checked"
                       Unchecked="ShowMarkCheckBox_Unchecked"/>
-            <Button Name="CalcButton" Grid.Column="2" Content="Calculate"
-                    Click="CalcButton_Click"/>
+                <Grid>
+                    <Button Name="CalcButton" Content="Calculate"
+                            Click="CalcButton_Click"/>
+                </Grid>
+            </StackPanel>
         </Grid>
-        <ContentPresenter Name="Presenter" Grid.Row="1" Grid.Column="0" Margin="5"
-                          VerticalAlignment="Top" HorizontalAlignment="Left" Grid.RowSpan="2"
-                          Content="{Binding Maze, Converter={StaticResource MazeToCanvasConverter}, Mode=OneWay}">
-            <ContentPresenter.RenderTransform>
-                <ScaleTransform ScaleX="2" ScaleY="2"/>
-            </ContentPresenter.RenderTransform>
-        </ContentPresenter>
-        <ContentPresenter Name="GraphPresenter" Grid.Row="1" Grid.Column="0" Margin="5"
-                          VerticalAlignment="Top" HorizontalAlignment="Left" Grid.RowSpan="2"
-                          Content="{Binding Graph, Converter={StaticResource GraphToCanvasConverter}, Mode=OneWay}">
-            <ContentPresenter.RenderTransform>
-                <ScaleTransform ScaleX="2" ScaleY="2"/>
-            </ContentPresenter.RenderTransform>
-        </ContentPresenter>
     </Grid>
 </Window>

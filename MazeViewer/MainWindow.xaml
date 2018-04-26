@@ -52,10 +52,16 @@
                       IsChecked="{Binding MarkEnabled, Mode=TwoWay}"
                       Checked="ShowMarkCheckBox_Checked"
                       Unchecked="ShowMarkCheckBox_Unchecked"/>
-                <Grid>
+                <Grid Height="Auto">
                     <Button Name="CalcButton" Content="Calculate"
                             Click="CalcButton_Click"/>
                 </Grid>
+                <TextBlock Text="{Binding MinimumStep, Mode=OneWay}" />
+                <Grid Height="Auto">
+                    <Button Name="SearchButton" Content="Search"
+                            Click="SearchButton_Click"/>
+                </Grid>
+                <TextBlock Text="{Binding SearchStep, Mode=OneWay}" />
             </StackPanel>
         </Grid>
     </Grid>

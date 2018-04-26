@@ -23,15 +23,20 @@ namespace MazeViewer.ViewModels
         public Maze Maze { get => this.maze; private set => SetValue(ref this.maze, value); }
 
         private Graph graph = null;
-        public Graph Graph { get => this.graph; private set => SetValue(ref this.graph, value); }
+        public Graph Graph { get => this.graph; private set => SetValueAndNotify(ref this.graph, value, nameof(Graph), nameof(MinimumStep)); }
+        public int MinimumStep { get => Graph?.Edges?.Count() ?? 0; }
 
         public int SelectedMazeFileIndex { get; set; } = 0;
         public ObservableCollection<string> MazeFileList { get; private set; } = new ObservableCollection<string>(Directory.EnumerateFiles(@"MazeData"));
 
         public bool MarkEnabled { get; set; } = true;
 
-        public double scale = 1.0;
+        private double scale = 1.0;
         public double Scale { get => this.scale; set => SetValue(ref this.scale, value); }
+
+        
+        private int searchStep = 0;
+        public int SearchStep { get => this.searchStep; set => SetValue(ref this.searchStep, value); }
 
         private bool initialized = false;
         public void InitializeData()

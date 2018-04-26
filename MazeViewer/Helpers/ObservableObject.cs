@@ -13,8 +13,21 @@ namespace MazeViewer.Helpers
         public void SetValue<T>(ref T target, T value, [CallerMemberName] string propertyName = "")
         {
             target = value;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            Notify(propertyName);
         }
+        public void SetValueAndNotify<T>(ref T target, T value, params string[] properties)
+        {
+            target = value;
+            Notify(properties);
+        }
+        public void Notify(params string[] properties)
+        {
+            foreach (var s in properties)
+            {
+                Notify(s);
+            }
+        }
+        public void Notify([CallerMemberName] string propertyName = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }

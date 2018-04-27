@@ -1,5 +1,6 @@
-﻿using MazeViewer.Helpers;
-using MazeViewer.Models;
+﻿using MazeViewer.Core;
+using MazeViewer.Core.Algorithm;
+using MazeViewer.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

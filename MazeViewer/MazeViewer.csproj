@@ -54,6 +54,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Core\Agent.cs" />
+    <Compile Include="Core\Algorithm\Wall.cs" />
+    <Compile Include="Core\Cell.cs" />
+    <Compile Include="Core\Direction.cs" />
+    <Compile Include="Helpers\EnumerableExtensions.cs" />
     <Compile Include="Helpers\GraphToCanvasConverter.cs" />
     <Compile Include="Helpers\ObservableObject.cs" />
     <Compile Include="Helpers\PathToFileNameConverter.cs" />
@@ -75,10 +80,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Edge.cs" />
-    <Compile Include="Models\Graph.cs" />
-    <Compile Include="Models\Maze.cs" />
-    <Compile Include="Models\Node.cs" />
+    <Compile Include="Core\Algorithm\Edge.cs" />
+    <Compile Include="Core\Algorithm\Graph.cs" />
+    <Compile Include="Core\Maze.cs" />
+    <Compile Include="Core\Algorithm\Node.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1244,6 +1249,8 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

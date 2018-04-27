@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MazeViewer.Models
+namespace MazeViewer.Core.Algorithm
 {
     public class Edge
     {

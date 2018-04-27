@@ -15,18 +15,13 @@ namespace MazeViewer.Helpers
             target = value;
             Notify(propertyName);
         }
-        public void SetValueAndNotify<T>(ref T target, T value, params string[] properties)
+        public void SetValueAndNotify<T>(ref T target, T value, [CallerMemberName] string propertyName = "", params string[] properties)
         {
             target = value;
+            Notify(propertyName);
             Notify(properties);
         }
-        public void Notify(params string[] properties)
-        {
-            foreach (var s in properties)
-            {
-                Notify(s);
-            }
-        }
+        public void Notify(params string[] properties) => properties.ForEach(s => Notify(s));
         public void Notify([CallerMemberName] string propertyName = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         public event PropertyChangedEventHandler PropertyChanged;
     }

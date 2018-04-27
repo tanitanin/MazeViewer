@@ -1,4 +1,4 @@
-﻿using MazeViewer.Models;
+﻿using MazeViewer.Core.Algorithm;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

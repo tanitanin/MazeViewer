@@ -5,21 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace MazeViewer.Models
+namespace MazeViewer.Core
 {
-    public class Cell
-    {
-        public bool North { get; set; } = false;
-        public bool East { get; set; } = false;
-        public bool West { get; set; } = false;
-        public bool South { get; set; } = false;
-        public bool IsStart { get; set; } = false;
-        public bool IsGoal { get; set; } = false;
-        public Point Pos { get; set; }
-    }
-
     public partial class Maze
     {
+        public static double ActualCellWidth = 180.0;
+        public static double ActualWallWidth = 20.0;
+
         public int Size { get; set; } = 0;
         public List<Cell> Cells { get; private set; } = new List<Cell>();
 

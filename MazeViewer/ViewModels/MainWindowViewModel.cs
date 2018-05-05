@@ -20,8 +20,8 @@ namespace MazeViewer.ViewModels
             View = mainWindow;
         }
 
-        private MazeData maze = null;
-        public MazeData Maze { get => this.maze; private set => SetValue(ref this.maze, value); }
+        private MazeData mazeData = null;
+        public MazeData MazeData { get => this.mazeData; private set => SetValue(ref this.mazeData, value); }
 
         private Graph graph = null;
         public Graph Graph { get => this.graph; private set => SetValueAndNotify(ref this.graph, value, nameof(Graph), nameof(MinimumStep)); }
@@ -58,10 +58,10 @@ namespace MazeViewer.ViewModels
                 {
                     var data = new byte[stream.Length];
                     stream.Read(data, 0, data.Length);
-                    var maze = MazeData.Load(data);
-                    if (maze.Validate())
+                    var mazeData = MazeData.Load(data);
+                    if (mazeData.Validate())
                     {
-                        Maze = maze;
+                        MazeData = mazeData;
                         Graph = null;
                     }
                     stream.Close();
@@ -71,22 +71,22 @@ namespace MazeViewer.ViewModels
 
         public void CalcMinimumPath()
         {
-            if(Maze != null)
+            if(MazeData != null)
             {
-                var graph = Maze.ToGraph();
-                var start = graph.Nodes.Where(n => n.Cell == Maze.Start)?.First() ?? null;
-                var goal = graph.Nodes.Where(n => n.Cell == Maze.Goals.First())?.First() ?? null;
+                var graph = MazeData.ToGraph();
+                var start = graph.Nodes.Where(n => n.Cell == MazeData.Start)?.First() ?? null;
+                var goal = graph.Nodes.Where(n => n.Cell == MazeData.Goals.First())?.First() ?? null;
                 Graph = graph.GetMinimumPath(start, goal);
             }
         }
 
         public void UpdateGraph()
         {
-            var graph = Maze.ToGraph();
+            var graph = MazeData.ToGraph();
             if (graph != null)
             {
-                var start = graph.Nodes?.Where(n => n.Cell == Maze.Start)?.First() ?? null;
-                var goal = graph.Nodes?.Where(n => n.Cell == Maze.Goals.First())?.First() ?? null;
+                var start = graph.Nodes?.Where(n => n.Cell == MazeData.Start)?.First() ?? null;
+                var goal = graph.Nodes?.Where(n => n.Cell == MazeData.Goals.First())?.First() ?? null;
 
                 if(start != null && goal != null)
                 {

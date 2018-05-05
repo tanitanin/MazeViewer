@@ -18,7 +18,7 @@ namespace MazeViewer.Helpers
             switch(value)
             {
                 case Graph graph:
-                    var maze = MainWindow.Current?.ViewModel.Maze;
+                    var maze = MainWindow.Current?.ViewModel.MazeData;
                     return maze != null ? graph.ToCanvas(maze) : null;
                 default: return null;
             }

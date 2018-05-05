@@ -9,7 +9,7 @@
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
         <helpers:PathToFileNameConverter x:Key="PathToFileNameConverter"/>
-        <helpers:MazeDataToCanvasConverter x:Key="MazeToCanvasConverter"/>
+        <helpers:MazeDataToCanvasConverter x:Key="MazeDataToCanvasConverter"/>
         <helpers:GraphToCanvasConverter x:Key="GraphToCanvasConverter"/>
     </Window.Resources>
     <Grid Background="LightGray">
@@ -39,7 +39,7 @@
                 <Canvas Width="160" Height="160">
                     <ContentPresenter Name="Presenter"  
                         VerticalAlignment="Top" HorizontalAlignment="Left"
-                        Content="{Binding Maze, Converter={StaticResource MazeToCanvasConverter}, Mode=OneWay}"/>
+                        Content="{Binding MazeData, Converter={StaticResource MazeDataToCanvasConverter}, Mode=OneWay}"/>
                     <ContentPresenter Name="GraphPresenter"
                         VerticalAlignment="Top" HorizontalAlignment="Left"
                         Content="{Binding Graph, Converter={StaticResource GraphToCanvasConverter}, Mode=OneWay}"/>

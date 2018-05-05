@@ -59,7 +59,7 @@
     <Compile Include="Core\Wall.cs" />
     <Compile Include="Core\Cell.cs" />
     <Compile Include="Core\Direction.cs" />
-    <Compile Include="Core\WallMaze.cs" />
+    <Compile Include="Core\Maze.cs" />
     <Compile Include="Helpers\EnumerableExtensions.cs" />
     <Compile Include="Helpers\GraphToCanvasConverter.cs" />
     <Compile Include="Helpers\WallMazeExtension.cs" />

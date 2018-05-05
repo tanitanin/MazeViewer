@@ -1,4 +1,5 @@
-﻿using MazeViewer.Core.Algorithm;
+﻿using MazeViewer.Core;
+using MazeViewer.Core.Algorithm;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -17,9 +18,10 @@ namespace MazeViewer.Helpers
         {
             switch(value)
             {
-                case Graph graph:
-                    var maze = MainWindow.Current?.ViewModel.MazeData;
-                    return maze != null ? graph.ToCanvas(maze) : null;
+                case Graph<System.Windows.Point> graph:
+                    //var maze = MainWindow.Current?.ViewModel.MazeData;
+                    //return maze != null ? graph.ToCanvas(maze) : null;
+                    return graph.Render();
                 default: return null;
             }
         }

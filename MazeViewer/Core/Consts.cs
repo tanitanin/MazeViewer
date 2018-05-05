@@ -8,14 +8,17 @@ namespace MazeViewer.Core
 {
     public static class Consts
     {
-        public static double ActualMazeCellWidth  = 180.0;
+        public static double ActualMazeCellWidth  = 18.0;
 
-        public static double ActualMazeWallWidth  =  12.0;
-        public static double ActualMazeWallHeight =  50.0;
-        public static double ActualMazeWallLength = 168.0;
+        public static double ActualMazeWallWidth  =  1.2;
+        public static double ActualMazeWallHeight =  5.0;
+        public static double ActualMazeWallLength = 16.8;
 
         public static double ActualMazePoleWidth  = ActualMazeWallWidth;
         public static double ActualMazePoleHeight = ActualMazeWallHeight;
+
+        public static TimeSpan CompetetTime = TimeSpan.FromMinutes(7);
+        public static int MaxGoalCount = 5;
 
         public static class Half
         {
@@ -27,6 +30,9 @@ namespace MazeViewer.Core
 
             public static double ActualMazePoleWidth = ActualMazeWallWidth;
             public static double ActualMazePoleHeight = ActualMazeWallHeight;
+
+            public static TimeSpan CompetetTime = TimeSpan.FromMinutes(15);
+            public static int MaxGoalCount = 5;
         }
     }
 }

@@ -15,6 +15,6 @@ namespace MazeViewer.Core
         public bool South { get; set; } = false;
         public bool IsStart { get; set; } = false;
         public bool IsGoal { get; set; } = false;
-        public Point Pos { get; set; }
+        public Index2D Pos { get; set; }
     }
 }

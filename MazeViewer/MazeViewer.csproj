@@ -55,15 +55,17 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Core\Agent.cs" />
+    <Compile Include="Core\Algorithm\GraphAlgorithm.cs" />
     <Compile Include="Core\Consts.cs" />
+    <Compile Include="Core\Index2D.cs" />
+    <Compile Include="Core\MazeDataExtensions.cs" />
+    <Compile Include="Core\Renderer.cs" />
     <Compile Include="Core\Wall.cs" />
     <Compile Include="Core\Cell.cs" />
     <Compile Include="Core\Direction.cs" />
     <Compile Include="Core\Maze.cs" />
     <Compile Include="Helpers\EnumerableExtensions.cs" />
     <Compile Include="Helpers\GraphToCanvasConverter.cs" />
-    <Compile Include="Helpers\WallMazeExtension.cs" />
-    <Compile Include="Helpers\WallMazeToCanvasConverter.cs" />
     <Compile Include="Helpers\ObservableObject.cs" />
     <Compile Include="Helpers\PathToFileNameConverter.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
@@ -75,8 +77,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Helpers\GraphExtension.cs" />
-    <Compile Include="Helpers\MazeExtension.cs" />
     <Compile Include="Helpers\MazeDataToCanvasConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

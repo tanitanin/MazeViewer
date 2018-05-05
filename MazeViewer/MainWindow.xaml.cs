@@ -44,15 +44,15 @@ namespace MazeViewer
             ViewModel.UpdateMaze();
         }
 
-        private void ShowMarkCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            ViewModel.UpdateMaze();
-        }
+        //private void ShowMarkCheckBox_Checked(object sender, RoutedEventArgs e)
+        //{
+        //    ViewModel.UpdateMaze();
+        //}
 
-        private void ShowMarkCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            ViewModel.UpdateMaze();
-        }
+        //private void ShowMarkCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        //{
+        //    ViewModel.UpdateMaze();
+        //}
 
         private void CalcButton_Click(object sender, RoutedEventArgs e)
         {

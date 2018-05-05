@@ -9,6 +9,12 @@ namespace MazeViewer.Core.Algorithm
     public class Node
     {
         public List<Edge> Incidents { get; set; }
-        public Cell Cell { get; set; }
+        public object Data { get; set; }
+    }
+
+    public class Node<T> : Node
+    {
+        public new List<Edge<T>> Incidents { get; set; }
+        public new T Data { get; set; }
     }
 }

@@ -18,8 +18,9 @@ namespace MazeViewer.Helpers
             switch(value)
             {
                 case MazeData maze:
-                    var markEnabled = MainWindow.Current?.ViewModel.MarkEnabled;
-                    return markEnabled.HasValue ? maze.ToCanvas(markEnabled.Value) : maze.ToCanvas();
+                    //var markEnabled = MainWindow.Current?.ViewModel.MarkEnabled;
+                    //return markEnabled.HasValue ? maze.ToCanvas(markEnabled.Value) : maze.ToCanvas();
+                    return maze.Render();
                 default: return null;
             }
         }

@@ -36,7 +36,7 @@
             </Grid.ColumnDefinitions>
             <Viewbox Grid.Column="0" Margin="5,5,10,0" Stretch="Uniform"
                      VerticalAlignment="Top" HorizontalAlignment="Left">
-                <Canvas Width="160" Height="160">
+                <Canvas Width="{Binding CanvasWidth, Mode=OneWay}" Height="{Binding CanvasHeight, Mode=OneWay}">
                     <ContentPresenter Name="Presenter"  
                         VerticalAlignment="Top" HorizontalAlignment="Left"
                         Content="{Binding MazeData, Converter={StaticResource MazeDataToCanvasConverter}, Mode=OneWay}"/>
@@ -47,11 +47,11 @@
                 <VisualStateManager.VisualStateGroups/>
             </Viewbox>
             <StackPanel Grid.Column="1" Margin="5" Orientation="Vertical">
-                <CheckBox Name="ShowMarkCheckBox"
+                <!--<CheckBox Name="ShowMarkCheckBox"
                       VerticalAlignment="Center"
                       IsChecked="{Binding MarkEnabled, Mode=TwoWay}"
                       Checked="ShowMarkCheckBox_Checked"
-                      Unchecked="ShowMarkCheckBox_Unchecked"/>
+                      Unchecked="ShowMarkCheckBox_Unchecked"/>-->
                 <Grid Height="Auto">
                     <Button Name="CalcButton" Content="Calculate"
                             Click="CalcButton_Click"/>

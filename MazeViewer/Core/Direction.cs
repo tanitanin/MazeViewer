@@ -19,6 +19,7 @@ namespace MazeViewer.Core
 
         public static implicit operator Point(Direction direction) => new Point(direction.X, direction.Y);
         public static implicit operator Vector(Direction direction) => new Vector(direction.X, direction.Y);
+        public static implicit operator Index2D(Direction direction) => new Index2D(direction.X, direction.Y);
     }
 
     public enum DirectionType

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MazeViewer.Core.Algorithm;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,9 +10,6 @@ namespace MazeViewer.Core
 {
     public partial class MazeData
     {
-        public static double ActualCellWidth = Consts.ActualMazeCellWidth;
-        public static double ActualWallWidth = Consts.ActualMazeWallWidth;
-
         public int Size { get; set; } = 0;
         public List<Cell> Cells { get; private set; } = new List<Cell>();
 
@@ -19,6 +17,9 @@ namespace MazeViewer.Core
 
         public Cell Start { get => Cells.Where(c => c.IsStart).First(); }
         public IEnumerable<Cell> Goals { get => Cells.Where(c => c.IsGoal); }
+
+        public double CellWidth { get => Consts.ActualMazeCellWidth; }
+        public double WallWidth { get => Consts.ActualMazeWallWidth; }
 
         public static MazeData Load(byte[] bytes)
         {
@@ -47,7 +48,7 @@ namespace MazeViewer.Core
             {
                 for (int y = 0; y < maze.Size; ++y)
                 {
-                    maze.At(x, y).Pos = new Point() { X = x, Y = y };
+                    maze.At(x, y).Pos = new Index2D() { X = x, Y = y };
                 }
             }
             return maze;

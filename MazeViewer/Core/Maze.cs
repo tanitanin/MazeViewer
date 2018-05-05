@@ -19,8 +19,8 @@ namespace MazeViewer.Core
         public Maze(int size = 0)
         {
             Size = size;
-            VerticalWalls   = new List<Wall>(Enumerable.Repeat(new Wall() { Exist = false, Virtual = false }, Size * (Size + 1)));
-            HorizontalWalls = new List<Wall>(Enumerable.Repeat(new Wall() { Exist = false, Virtual = false }, Size * (Size + 1)));
+            VerticalWalls   = Enumerable.Repeat(new Wall() { Exist = false, Virtual = false }, Size * (Size + 1)).ToList();
+            HorizontalWalls = Enumerable.Repeat(new Wall() { Exist = false, Virtual = false }, Size * (Size + 1)).ToList();
             Start = null;
             Goals = new List<Cell>();
         }

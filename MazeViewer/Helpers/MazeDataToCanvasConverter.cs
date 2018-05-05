@@ -11,7 +11,7 @@ using System.Windows.Shapes;
 
 namespace MazeViewer.Helpers
 {
-    public class MazeToCanvasConverter : IValueConverter
+    public class MazeDataToCanvasConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

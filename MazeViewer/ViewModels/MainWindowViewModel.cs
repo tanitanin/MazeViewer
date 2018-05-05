@@ -30,6 +30,8 @@ namespace MazeViewer.ViewModels
         public int SelectedMazeFileIndex { get; set; } = 0;
         public ObservableCollection<string> MazeFileList { get; private set; } = new ObservableCollection<string>(Directory.EnumerateFiles(@"MazeData"));
 
+        public Agent Agent { get; } = new Agent();
+
         public bool MarkEnabled { get; set; } = true;
 
         private double scale = 1.0;

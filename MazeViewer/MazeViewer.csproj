@@ -55,11 +55,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Core\Agent.cs" />
-    <Compile Include="Core\Algorithm\Wall.cs" />
+    <Compile Include="Core\Consts.cs" />
+    <Compile Include="Core\Wall.cs" />
     <Compile Include="Core\Cell.cs" />
     <Compile Include="Core\Direction.cs" />
     <Compile Include="Helpers\EnumerableExtensions.cs" />
     <Compile Include="Helpers\GraphToCanvasConverter.cs" />
+    <Compile Include="Helpers\WallMazeExtension.cs" />
+    <Compile Include="Helpers\WallMazeToCanvasConverter.cs" />
     <Compile Include="Helpers\ObservableObject.cs" />
     <Compile Include="Helpers\PathToFileNameConverter.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />

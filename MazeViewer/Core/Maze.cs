@@ -9,8 +9,8 @@ namespace MazeViewer.Core
 {
     public partial class Maze
     {
-        public static double ActualCellWidth = 180.0;
-        public static double ActualWallWidth = 20.0;
+        public static double ActualCellWidth = Consts.ActualMazeCellWidth;
+        public static double ActualWallWidth = Consts.ActualMazeWallWidth;
 
         public int Size { get; set; } = 0;
         public List<Cell> Cells { get; private set; } = new List<Cell>();

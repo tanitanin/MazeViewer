@@ -86,7 +86,7 @@
   <ItemGroup>
     <Compile Include="Core\Algorithm\Edge.cs" />
     <Compile Include="Core\Algorithm\Graph.cs" />
-    <Compile Include="Core\Maze.cs" />
+    <Compile Include="Core\MazeData.cs" />
     <Compile Include="Core\Algorithm\Node.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

@@ -20,8 +20,8 @@ namespace MazeViewer.ViewModels
             View = mainWindow;
         }
 
-        private Maze maze = null;
-        public Maze Maze { get => this.maze; private set => SetValue(ref this.maze, value); }
+        private MazeData maze = null;
+        public MazeData Maze { get => this.maze; private set => SetValue(ref this.maze, value); }
 
         private Graph graph = null;
         public Graph Graph { get => this.graph; private set => SetValueAndNotify(ref this.graph, value, nameof(Graph), nameof(MinimumStep)); }
@@ -58,7 +58,7 @@ namespace MazeViewer.ViewModels
                 {
                     var data = new byte[stream.Length];
                     stream.Read(data, 0, data.Length);
-                    var maze = Maze.Load(data);
+                    var maze = MazeData.Load(data);
                     if (maze.Validate())
                     {
                         Maze = maze;

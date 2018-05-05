@@ -3,77 +3,55 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace MazeViewer.Core
 {
-    public partial class Maze
+
+    public class Maze
     {
-        public static double ActualCellWidth = Consts.ActualMazeCellWidth;
-        public static double ActualWallWidth = Consts.ActualMazeWallWidth;
-
         public int Size { get; set; } = 0;
-        public List<Cell> Cells { get; private set; } = new List<Cell>();
+        public List<Wall> VerticalWalls { get; set; }
+        public List<Wall> HorizontalWalls { get; set; }
 
-        public Cell At(int x, int y) => Cells[x*Size+ y];
-
-        public Cell Start { get => Cells.Where(c => c.IsStart).First(); }
-        public IEnumerable<Cell> Goals { get => Cells.Where(c => c.IsGoal); }
-
-        public static Maze Load(byte[] bytes)
+        public Cell Start { get; set; }
+        public List<Cell> Goals { get; set; }
+        
+        public Wall At(int x, int y, DirectionType direction)
         {
-            var maze = new Maze()
+            switch (direction)
             {
-                Size = (int)Math.Sqrt(bytes.Count()),
-                Cells = bytes.Select(b => new Cell {
-                    North = (b & 0x01) > 0,
-                    East = (b & 0x02) > 0,
-                    West = (b & 0x08) > 0,
-                    South = (b & 0x04) > 0,
-                    IsStart = (b & 0x10) > 0,
-                    IsGoal = (b & 0x20) > 0,
-                }).ToList(),
-            };
-            maze.At(0, 0).IsStart = true;
-            if(maze.Cells.Where(x => x.IsGoal).Count() < 1)
-            {
-                var n = maze.Size / 2;
-                maze.At(n-1, n-1).IsGoal = true;
-                maze.At(n-1, n  ).IsGoal = true;
-                maze.At(n  , n-1).IsGoal = true;
-                maze.At(n  , n  ).IsGoal = true;
+                case DirectionType.North: return HorizontalWalls[x + y * (Size + 1)];
+                case DirectionType.South: return HorizontalWalls[x + (y + 1) * (Size + 1)];
+                case DirectionType.East: return VerticalWalls[(x + 1) + y * (Size + 1)];
+                case DirectionType.West: return VerticalWalls[x + y * (Size + 1)];
+                default: return null;
             }
-            for(int x = 0; x < maze.Size; ++x)
-            {
-                for (int y = 0; y < maze.Size; ++y)
-                {
-                    maze.At(x, y).Pos = new Point() { X = x, Y = y };
-                }
-            }
-            return maze;
         }
 
-        public bool Validate()
+        public static Maze LoadFromMazeData(MazeData maze)
         {
-            for(int i=0; i < Size; ++i)
+            var wallMaze = new Maze
             {
-                for(int j = 0; j < Size; ++j)
+                Size = maze.Size,
+                VerticalWalls = new List<Wall>(maze.Size * (maze.Size + 1)),
+                HorizontalWalls = new List<Wall>(maze.Size * (maze.Size + 1)),
+                Goals = new List<Cell>(),
+            };
+
+            for (var y = 0; y < maze.Size; ++y)
+            {
+                for (var x = 0; x < maze.Size; ++x)
                 {
-                    if (j > 0)
-                    {
-                        var u = At(i, j - 1);
-                        var v = At(i, j);
-                        if (u.North != v.South) return false;
-                    }
-                    if (i > 0)
-                    {
-                        var s = At(i - 1, j);
-                        var t = At(i, j);
-                        if (s.East != t.West) return false;
-                    }
+                    if (maze.At(x, y).East) wallMaze.At(x, y, DirectionType.East).Exist = true;
+                    if (maze.At(x, y).West) wallMaze.At(x, y, DirectionType.West).Exist = true;
+                    if (maze.At(x, y).North) wallMaze.At(x, y, DirectionType.North).Exist = true;
+                    if (maze.At(x, y).South) wallMaze.At(x, y, DirectionType.South).Exist = true;
+                    if (maze.At(x, y).IsStart) wallMaze.Start = maze.At(x, y);
+                    if (maze.At(x, y).IsGoal) wallMaze.Goals.Add(maze.At(x, y));
                 }
             }
-            return true;
+
+            return wallMaze;
         }
     }
 }

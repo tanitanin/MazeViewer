@@ -15,7 +15,7 @@ namespace MazeViewer.Core
         private Stopwatch stopwatch = null;
         public Stopwatch Stopwatch { get => this.stopwatch; }
 
-        public WallMaze InternalMazeData { get; set; } = new WallMaze();
+        public Maze InternalMazeData { get; set; } = new Maze();
 
         public void Simulate()
         {

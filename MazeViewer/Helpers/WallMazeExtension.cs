@@ -19,7 +19,7 @@ namespace MazeViewer.Helpers
         public static double WallWidth { get; } = Consts.ActualMazeWallWidth;
         public static double CellWidth { get; } = Consts.ActualMazeCellWidth;
 
-        public static Canvas ToCanvas(this WallMaze maze, bool showMark = false)
+        public static Canvas ToCanvas(this Maze maze, bool showMark = false)
         {
             var canvas = new Canvas();
             MainWindow.Current.Dispatcher.Invoke(() =>

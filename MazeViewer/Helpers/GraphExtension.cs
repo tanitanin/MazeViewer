@@ -17,7 +17,7 @@ namespace MazeViewer.Helpers
         public static Color NodeColor { get; } = Colors.White;
         public static Color EdgeColor { get; } = Colors.White;
 
-        public static Canvas ToCanvas(this Graph graph, Maze maze)
+        public static Canvas ToCanvas(this Graph graph, MazeData maze)
         {
             if (maze == null) return null;
 
@@ -70,7 +70,7 @@ namespace MazeViewer.Helpers
             return canvas;
         }
 
-        private static Point GetCenter(Maze maze, Cell cell) => new Point {
+        private static Point GetCenter(MazeData maze, Cell cell) => new Point {
             X = (double)cell.Pos.X * MazeExtension.CellWidth + (MazeExtension.CellWidth / 2),
             Y = (double)(maze.Size - cell.Pos.Y) * MazeExtension.CellWidth - (MazeExtension.CellWidth / 2),
         };

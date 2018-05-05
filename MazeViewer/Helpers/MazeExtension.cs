@@ -19,7 +19,7 @@ namespace MazeViewer.Helpers
         public static double WallWidth { get; } = 1.0;
         public static double CellWidth { get; } = 10.0;
 
-        public static Canvas ToCanvas(this Maze maze, bool showMark = false)
+        public static Canvas ToCanvas(this MazeData maze, bool showMark = false)
         {
             var canvas = new Canvas();
             MainWindow.Current.Dispatcher.Invoke(() =>
@@ -83,7 +83,7 @@ namespace MazeViewer.Helpers
         private static Point GetSouthEast(int x, int y, int n) => new Point { X = (x + 1) * CellWidth, Y = (n - y) * CellWidth };
         private static Point GetSouthWest(int x, int y, int n) => new Point { X = x * CellWidth, Y = (n - y) * CellWidth };
         
-        public static Graph ToGraph(this Maze maze)
+        public static Graph ToGraph(this MazeData maze)
         {
             var graph = new Graph()
             {

@@ -10,11 +10,13 @@ namespace MazeViewer.Core.Algorithm
     {
         public Node Start { get; set; }
         public Node End { get; set; }
+        public double Weight { get; set; }
     }
 
     public class Edge<T> : Edge
     {
-        public new Node<T> Start { get; set; }
-        public new Node<T> End { get; set; }
+        public Node<T> Start { get; set; }
+        public Node<T> End { get; set; }
+        public double Weight { get; set; }
     }
 }

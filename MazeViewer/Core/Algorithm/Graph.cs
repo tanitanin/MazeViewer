@@ -14,7 +14,7 @@ namespace MazeViewer.Core.Algorithm
 
     public class Graph<T> : Graph
     {
-        public new List<Node<T>> Nodes { get; set; }
-        public new List<Edge<T>> Edges { get; set; }
+        public List<Node<T>> Nodes { get; set; }
+        public List<Edge<T>> Edges { get; set; }
     }
 }

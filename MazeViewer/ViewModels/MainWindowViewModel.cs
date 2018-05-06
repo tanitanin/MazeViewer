@@ -22,11 +22,11 @@ namespace MazeViewer.ViewModels
         }
 
         private MazeData mazeData = null;
-        public MazeData MazeData { get => this.mazeData; private set => SetValue(ref this.mazeData, value); }
+        public MazeData MazeData { get => this.mazeData; private set => SetValueAndNotify(ref this.mazeData, value, nameof(MazeData), nameof(CanvasWidth), nameof(CanvasHeight)); }
 
         private Graph graph = null;
         public Graph Graph { get => this.graph; private set => SetValueAndNotify(ref this.graph, value, nameof(Graph), nameof(MinimumStep)); }
-        public int MinimumStep { get => Graph?.Edges?.Count() ?? 0; }
+        public double MinimumStep { get => Graph?.Edges?.Aggregate(0.0, (s, e) => { return s + e.Weight; }) ?? 0; }
 
         public int SelectedMazeFileIndex { get; set; } = 0;
         public ObservableCollection<string> MazeFileList { get; private set; } = new ObservableCollection<string>(Directory.EnumerateFiles(@"MazeData"));
@@ -79,7 +79,8 @@ namespace MazeViewer.ViewModels
                 var (graph, start, goal) = MakeGraph(MazeData);
                 //var start = graph.Nodes.Where(n => n.Data == MazeData.Start)?.First() ?? null;
                 //var goal = graph.Nodes.Where(n => n.Data == MazeData.Goals.First())?.First() ?? null;
-                var result = graph.GetMinimumPath(start, goal);
+                //var result = graph.GetMinimumPath(start, goal);
+                var result = graph.Dijkstra(start, goal);
                 result.Edges.RemoveAll(e => e.End == goal);
                 result.Nodes.Remove(goal);
                 Graph = result;
@@ -115,10 +116,10 @@ namespace MazeViewer.ViewModels
                     var cell = mazeData.At(x, y);
 
                     var incidents = nodes[cell].Incidents;
-                    if (!cell.East) incidents.Add(new Edge<Point>() { Start = nodes[cell], End = nodes[mazeData.At(x + 1, y)] });
-                    if (!cell.West) incidents.Add(new Edge<Point>() { Start = nodes[cell], End = nodes[mazeData.At(x - 1, y)] });
-                    if (!cell.North) incidents.Add(new Edge<Point>() { Start = nodes[cell], End = nodes[mazeData.At(x, y + 1)] });
-                    if (!cell.South) incidents.Add(new Edge<Point>() { Start = nodes[cell], End = nodes[mazeData.At(x, y - 1)] });
+                    if (!cell.East) incidents.Add(new Edge<Point>() { Start = nodes[cell], End = nodes[mazeData.At(x + 1, y)], Weight = 1.0 });
+                    if (!cell.West) incidents.Add(new Edge<Point>() { Start = nodes[cell], End = nodes[mazeData.At(x - 1, y)], Weight = 1.0 });
+                    if (!cell.North) incidents.Add(new Edge<Point>() { Start = nodes[cell], End = nodes[mazeData.At(x, y + 1)], Weight = 1.0 });
+                    if (!cell.South) incidents.Add(new Edge<Point>() { Start = nodes[cell], End = nodes[mazeData.At(x, y - 1)], Weight = 1.0 });
 
                     foreach (var e in incidents) edges.Add(e);
                 }
@@ -136,9 +137,9 @@ namespace MazeViewer.ViewModels
             var goal = graph.Nodes.Last();
             foreach (var g in mazeData.Goals)
             {
-                graph.Edges.Add(new Edge<Point>() { Start = nodes[g], End = goal });
+                graph.Edges.Add(new Edge<Point>() { Start = nodes[g], End = goal, Weight = 1.0 });
                 var e = graph.Edges.Last();
-                goal.Incidents.Add(e);
+                //goal.Incidents.Add(e);
                 nodes[g].Incidents.Add(e);
             }
 

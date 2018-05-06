@@ -14,7 +14,7 @@ namespace MazeViewer.Core.Algorithm
 
     public class Node<T> : Node
     {
-        public new List<Edge<T>> Incidents { get; set; }
-        public new T Data { get; set; }
+        public List<Edge<T>> Incidents { get; set; }
+        public T Data { get; set; }
     }
 }

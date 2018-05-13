@@ -56,6 +56,10 @@
                     <Button Name="CalcButton" Content="Calculate"
                             Click="CalcButton_Click"/>
                 </Grid>
+                <Grid Height="Auto">
+                    <Button Name="Calc2Button" Content="Calculate 1/2"
+                            Click="CalcButton2_Click"/>
+                </Grid>
                 <TextBlock Text="{Binding MinimumStep, Mode=OneWay}" />
                 <Grid Height="Auto">
                     <Button Name="SearchButton" Content="Search"

@@ -59,6 +59,11 @@ namespace MazeViewer
             ViewModel.CalcMinimumPath();
         }
 
+        private void CalcButton2_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.CalcMinimumPath2();
+        }
+
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
 

@@ -24,8 +24,8 @@ namespace MazeViewer.ViewModels
         private MazeData mazeData = null;
         public MazeData MazeData { get => this.mazeData; private set => SetValueAndNotify(ref this.mazeData, value, nameof(MazeData), nameof(CanvasWidth), nameof(CanvasHeight)); }
 
-        private Graph graph = null;
-        public Graph Graph { get => this.graph; private set => SetValueAndNotify(ref this.graph, value, nameof(Graph), nameof(MinimumStep)); }
+        private Graph<Point> graph = null;
+        public Graph<Point> Graph { get => this.graph; private set => SetValueAndNotify(ref this.graph, value, nameof(Graph), nameof(MinimumStep)); }
         public double MinimumStep { get => Graph?.Edges?.Aggregate(0.0, (s, e) => { return s + e.Weight; }) ?? 0; }
 
         public int SelectedMazeFileIndex { get; set; } = 0;
@@ -81,9 +81,30 @@ namespace MazeViewer.ViewModels
                 //var goal = graph.Nodes.Where(n => n.Data == MazeData.Goals.First())?.First() ?? null;
                 //var result = graph.GetMinimumPath(start, goal);
                 var result = graph.Dijkstra(start, goal);
-                result.Edges.RemoveAll(e => e.End == goal);
-                result.Nodes.Remove(goal);
-                Graph = result;
+                if(result != null)
+                {
+                    result.Edges.RemoveAll(e => e.End == goal);
+                    result.Nodes.Remove(goal);
+                    Graph = result;
+                }
+            }
+        }
+
+        public void CalcMinimumPath2()
+        {
+            if (MazeData != null)
+            {
+                var (graph, start, goal) = MakeGraph2(MazeData);
+                //var start = graph.Nodes.Where(n => n.Data == MazeData.Start)?.First() ?? null;
+                //var goal = graph.Nodes.Where(n => n.Data == MazeData.Goals.First())?.First() ?? null;
+                //var result = graph.GetMinimumPath(start, goal);
+                var result = graph.Dijkstra(start, goal);
+                if (result != null)
+                {
+                    result.Edges.RemoveAll(e => e.End == goal);
+                    result.Nodes.Remove(goal);
+                    Graph = result;
+                }
             }
         }
 
@@ -144,6 +165,119 @@ namespace MazeViewer.ViewModels
             }
 
             return (graph, nodes[mazeData.Start], goal);
+        }
+
+        private (Graph<Point>, Node<Point>, Node<Point>) MakeGraph2(MazeData mazeData)
+        {
+            var graph = new Graph<Point>()
+            {
+                Nodes = new List<Node<Point>>(),
+                Edges = new List<Edge<Point>>(),
+            };
+            var nodes = new Dictionary<(Cell, DirectionType), Node<Point>>();
+
+            for (int x = 0; x < mazeData.Size; ++x)
+            {
+                for (int y = 0; y < mazeData.Size; ++y)
+                {
+                    var cell = mazeData.At(x, y);
+                    var v_center = new Node<Point>() { Data = mazeData.GetCenterPoint(x, y), Incidents = new List<Edge<Point>>() };
+                    var v_north = new Node<Point>() { Data = mazeData.GetNorthPoint(x, y), Incidents = new List<Edge<Point>>() };
+                    var v_south = new Node<Point>() { Data = mazeData.GetSouthPoint(x, y), Incidents = new List<Edge<Point>>() };
+                    var v_east = new Node<Point>() { Data = mazeData.GetEastPoint(x, y), Incidents = new List<Edge<Point>>() };
+                    var v_west = new Node<Point>() { Data = mazeData.GetWestPoint(x, y), Incidents = new List<Edge<Point>>() };
+                    nodes.Add((cell, DirectionType.Center), v_center);
+                    nodes.Add((cell, DirectionType.North), v_north);
+                    nodes.Add((cell, DirectionType.South), v_south);
+                    nodes.Add((cell, DirectionType.East), v_east);
+                    nodes.Add((cell, DirectionType.West), v_west);
+                }
+            }
+            graph.Nodes.AddRange(nodes.Values);
+
+            var edges = graph.Edges;
+
+            for (int x = 0; x < mazeData.Size; ++x)
+            {
+                for (int y = 0; y < mazeData.Size; ++y)
+                {
+                    var cell = mazeData.At(x, y);
+                    if (!cell.East)
+                    {
+                        var incidents = nodes[(cell, DirectionType.East)].Incidents;
+                        incidents.Add(new Edge<Point>() { Start = nodes[(cell, DirectionType.East)], End = nodes[(mazeData.At(x + 1, y), DirectionType.West)], Weight = 0.0 });
+                        incidents.Add(new Edge<Point>() { Start = nodes[(cell, DirectionType.East)], End = nodes[(cell, DirectionType.Center)], Weight = 0.5 });
+                        incidents.Add(new Edge<Point>() { Start = nodes[(cell, DirectionType.East)], End = nodes[(cell, DirectionType.North)], Weight = 0.5 * 1.414 });
+                        incidents.Add(new Edge<Point>() { Start = nodes[(cell, DirectionType.East)], End = nodes[(cell, DirectionType.South)], Weight = 0.5 * 1.414 });
+                    }
+                    if (!cell.West)
+                    {
+                        var incidents = nodes[(cell, DirectionType.West)].Incidents;
+                        incidents.Add(new Edge<Point>() { Start = nodes[(cell, DirectionType.West)], End = nodes[(mazeData.At(x - 1, y), DirectionType.East)], Weight = 0.0 });
+                        incidents.Add(new Edge<Point>() { Start = nodes[(cell, DirectionType.West)], End = nodes[(cell, DirectionType.Center)], Weight = 0.5 });
+                        incidents.Add(new Edge<Point>() { Start = nodes[(cell, DirectionType.West)], End = nodes[(cell, DirectionType.North)], Weight = 0.5 * 1.414 });
+                        incidents.Add(new Edge<Point>() { Start = nodes[(cell, DirectionType.West)], End = nodes[(cell, DirectionType.South)], Weight = 0.5 * 1.414 });
+                    }
+                    if (!cell.North)
+                    {
+                        var incidents = nodes[(cell, DirectionType.North)].Incidents;
+                        incidents.Add(new Edge<Point>() { Start = nodes[(cell, DirectionType.North)], End = nodes[(mazeData.At(x, y + 1), DirectionType.South)], Weight = 0.0 });
+                        incidents.Add(new Edge<Point>() { Start = nodes[(cell, DirectionType.North)], End = nodes[(cell, DirectionType.Center)], Weight = 0.5 });
+                        incidents.Add(new Edge<Point>() { Start = nodes[(cell, DirectionType.North)], End = nodes[(cell, DirectionType.West)], Weight = 0.5 * 1.414 });
+                        incidents.Add(new Edge<Point>() { Start = nodes[(cell, DirectionType.North)], End = nodes[(cell, DirectionType.East)], Weight = 0.5 * 1.414 });
+                    }
+                    if (!cell.South)
+                    {
+                        var incidents = nodes[(cell, DirectionType.South)].Incidents;
+                        incidents.Add(new Edge<Point>() { Start = nodes[(cell, DirectionType.South)], End = nodes[(mazeData.At(x, y - 1), DirectionType.North)], Weight = 0.0 });
+                        incidents.Add(new Edge<Point>() { Start = nodes[(cell, DirectionType.South)], End = nodes[(cell, DirectionType.Center)], Weight = 0.5 });
+                        incidents.Add(new Edge<Point>() { Start = nodes[(cell, DirectionType.South)], End = nodes[(cell, DirectionType.West)], Weight = 0.5 * 1.414 });
+                        incidents.Add(new Edge<Point>() { Start = nodes[(cell, DirectionType.South)], End = nodes[(cell, DirectionType.East)], Weight = 0.5 * 1.414 });
+                    }
+
+                    if (cell.IsStart || cell.IsGoal)
+                    {
+                        var incidents_center = nodes[(cell, DirectionType.Center)].Incidents;
+                        incidents_center.Add(new Edge<Point>() { Start = nodes[(cell, DirectionType.Center)], End = nodes[(cell, DirectionType.West)], Weight = 0.5 });
+                        incidents_center.Add(new Edge<Point>() { Start = nodes[(cell, DirectionType.Center)], End = nodes[(cell, DirectionType.East)], Weight = 0.5 });
+                        incidents_center.Add(new Edge<Point>() { Start = nodes[(cell, DirectionType.Center)], End = nodes[(cell, DirectionType.South)], Weight = 0.5 });
+                        incidents_center.Add(new Edge<Point>() { Start = nodes[(cell, DirectionType.Center)], End = nodes[(cell, DirectionType.North)], Weight = 0.5 });
+                    }
+                    else
+                    {
+                        var incidents_center = nodes[(cell, DirectionType.Center)].Incidents;
+                        incidents_center.Add(new Edge<Point>() { Start = nodes[(cell, DirectionType.Center)], End = nodes[(cell, DirectionType.West)], Weight = 0.5 });
+                        incidents_center.Add(new Edge<Point>() { Start = nodes[(cell, DirectionType.Center)], End = nodes[(cell, DirectionType.East)], Weight = 0.5 });
+                        incidents_center.Add(new Edge<Point>() { Start = nodes[(cell, DirectionType.Center)], End = nodes[(cell, DirectionType.South)], Weight = 0.5 });
+                        incidents_center.Add(new Edge<Point>() { Start = nodes[(cell, DirectionType.Center)], End = nodes[(cell, DirectionType.North)], Weight = 0.5 });
+                    }
+                    foreach (var e in nodes[(cell, DirectionType.Center)].Incidents) edges.Add(e);
+                    foreach (var e in nodes[(cell, DirectionType.East)].Incidents) edges.Add(e);
+                    foreach (var e in nodes[(cell, DirectionType.West)].Incidents) edges.Add(e);
+                    foreach (var e in nodes[(cell, DirectionType.North)].Incidents) edges.Add(e);
+                    foreach (var e in nodes[(cell, DirectionType.South)].Incidents) edges.Add(e);
+                }
+            }
+
+            var point = mazeData.Goals.Aggregate(new Point(0.0, 0.0), (seed, cell) => {
+                var p = mazeData.GetCenterPoint(cell.Pos.X, cell.Pos.Y);
+                return seed + new Vector(p.X, p.Y);
+            });
+            graph.Nodes.Add(new Node<Point>()
+            {
+                Data = new Point(point.X / mazeData.Goals.Count(), point.Y / mazeData.Goals.Count()),
+                Incidents = new List<Edge<Point>>(),
+            });
+            var goal = graph.Nodes.Last();
+            foreach (var g in mazeData.Goals)
+            {
+                graph.Edges.Add(new Edge<Point>() { Start = nodes[(g, DirectionType.Center)], End = goal, Weight = 1.0 });
+                var e = graph.Edges.Last();
+                //goal.Incidents.Add(e);
+                nodes[(g, DirectionType.Center)].Incidents.Add(e);
+            }
+
+            return (graph, nodes[(mazeData.Start, DirectionType.Center)], goal);
         }
 
         //public void UpdateGraph()

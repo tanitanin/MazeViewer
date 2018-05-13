@@ -28,7 +28,7 @@ namespace MazeViewer.Core
         South,
         East,
         West,
-        On
+        Center
     }
 
     public static partial class VectorExtensions
@@ -45,7 +45,7 @@ namespace MazeViewer.Core
                 if (vector.X + vector.Y > 0) return DirectionType.East;
                 if (vector.X + vector.Y < 0) return DirectionType.West;
             }
-            return DirectionType.On;
+            return DirectionType.Center;
         }
     }
 }

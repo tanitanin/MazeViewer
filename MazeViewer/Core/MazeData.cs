@@ -44,12 +44,16 @@ namespace MazeViewer.Core
                 maze.At(n  , n-1).IsGoal = true;
                 maze.At(n  , n  ).IsGoal = true;
             }
-            for(int x = 0; x < maze.Size; ++x)
+            //for(int x = 0; x < maze.Size; ++x)
+            //{
+            //    for (int y = 0; y < maze.Size; ++y)
+            //    {
+            //        maze.At(x, y).Pos = new Index2D() { X = x, Y = y };
+            //    }
+            //}
+            foreach(var index in new Index2D.Range(maze.Size, maze.Size))
             {
-                for (int y = 0; y < maze.Size; ++y)
-                {
-                    maze.At(x, y).Pos = new Index2D() { X = x, Y = y };
-                }
+                maze.At(index.X, index.Y).Pos = index;
             }
             return maze;
         }

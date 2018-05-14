@@ -61,11 +61,22 @@
                             Click="CalcButton2_Click"/>
                 </Grid>
                 <TextBlock Text="{Binding MinimumStep, Mode=OneWay}" />
-                <Grid Height="Auto">
+                <!--<Grid Height="Auto">
                     <Button Name="SearchButton" Content="Search"
                             Click="SearchButton_Click"/>
                 </Grid>
-                <TextBlock Text="{Binding SearchStep, Mode=OneWay}" />
+                <TextBlock Text="{Binding SearchStep, Mode=OneWay}" />-->
+                <Grid Height="Auto">
+                    <Label Content="Simulate"/>
+                </Grid>
+                <StackPanel Orientation="Horizontal">
+                    <Button Margin="2" Padding="5" Name="PlayButton" FontFamily="Segoe MDL2 Assets" Content="&#xE768;"
+                            Click="PlayButton_Click"/>
+                    <Button Margin="2" Padding="5" Name="PauseButton" FontFamily="Segoe MDL2 Assets" Content="&#xE769;"
+                            Click="PauseButton_Click"/>
+                    <Button Margin="2" Padding="5" Name="StopButton" FontFamily="Segoe MDL2 Assets" Content="&#xE71A;"
+                            Click="StopButton_Click"/>
+                </StackPanel>
             </StackPanel>
         </Grid>
     </Grid>

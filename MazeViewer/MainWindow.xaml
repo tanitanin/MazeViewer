@@ -43,6 +43,9 @@
                     <ContentPresenter Name="GraphPresenter"
                         VerticalAlignment="Top" HorizontalAlignment="Left"
                         Content="{Binding Graph, Converter={StaticResource GraphToCanvasConverter}, Mode=OneWay}"/>
+                    <ContentPresenter Name="SimulationPresenter"
+                        VerticalAlignment="Top" HorizontalAlignment="Left"
+                        />
                 </Canvas>
                 <VisualStateManager.VisualStateGroups/>
             </Viewbox>

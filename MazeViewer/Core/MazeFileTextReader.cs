@@ -47,7 +47,7 @@ namespace MazeViewer.Core
         public IReadOnlyList<Cell> Cells { get => this.cells; }
         private List<Cell> cells = new List<Cell>();
 
-        private Dictionary<Index2D, Cell> mapToCell = new Dictionary<Index2D, Cell>();
+        private Dictionary<int, Cell> mapToCell = new Dictionary<int, Cell>();
 
         /// <summary>
         /// 迷路の横セル数
@@ -83,7 +83,7 @@ namespace MazeViewer.Core
                 {
                     var cell = new Cell() { Pos = new Index2D(x, y) };
                     this.cells.Add(cell);
-                    this.mapToCell.Add(cell.Pos, cell);
+                    this.mapToCell.Add(GetIndex(cell.Pos), cell);
                 }
             }
             
@@ -100,7 +100,7 @@ namespace MazeViewer.Core
             {
                 for (var y = 0; y < NumOfVerticalCells; ++y)
                 {
-                    var cell = this.mapToCell[new Index2D(x, y)];
+                    var cell = this.mapToCell[GetIndex(x,y)];
                     mazeData.At(x, y).East = cell.East;
                     mazeData.At(x, y).West = cell.West;
                     mazeData.At(x, y).North = cell.North;
@@ -116,15 +116,26 @@ namespace MazeViewer.Core
 
         #region Private Functions
 
+        private int GetIndex(Index2D index)
+        {
+            return GetIndex(index.X, index.Y);
+        }
+
+        private int GetIndex(int x, int y)
+        {
+            return x * NumOfVerticalCells + y;
+        }
+
         /// <summary>
         /// 1行分を読み込む
         /// </summary>
         /// <param name="line"></param>
         private void ReadLine(string line)
         {
+            this.currentIndex.X = 0;
             if (line.StartsWith(PoleExpression))
             {
-                foreach (var str in line.Split(new string[] { PoleExpression }, StringSplitOptions.None))
+                foreach (var str in line.Split(new string[] { PoleExpression }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     ReadHorizontalWall(str);
                     this.currentIndex.X++;
@@ -147,8 +158,6 @@ namespace MazeViewer.Core
                     }
                 }
             }
-            // 行を読み終わったらX=0に戻る
-            this.currentIndex.X = 0;
         }
 
         /// <summary>
@@ -159,12 +168,12 @@ namespace MazeViewer.Core
         {
             if (str == StartCellExpression)
             {
-                this.mapToCell[this.currentIndex].IsStart = true;
+                this.mapToCell[GetIndex(this.currentIndex)].IsStart = true;
                 Start = this.currentIndex;
             }
             else if (str == GoalCellExpression)
             {
-                this.mapToCell[this.currentIndex].IsGoal = true;
+                this.mapToCell[GetIndex(this.currentIndex)].IsGoal = true;
                 this.goals.Add(this.currentIndex);
             }
             else if (str == EmptyCellExpression)
@@ -182,11 +191,11 @@ namespace MazeViewer.Core
             {
                 if (this.currentIndex.X > 0)
                 {
-                    this.mapToCell[new Index2D(this.currentIndex.X - 1, this.currentIndex.Y)].East = true;
+                    this.mapToCell[GetIndex(this.currentIndex.X - 1, this.currentIndex.Y)].East = true;
                 }
                 if (this.currentIndex.X < NumOfHorizontalCells)
                 {
-                    this.mapToCell[this.currentIndex].West = true;
+                    this.mapToCell[GetIndex(this.currentIndex)].West = true;
                 }
             }
             else if (str == VerticalWallEmpty)
@@ -204,11 +213,11 @@ namespace MazeViewer.Core
             {
                 if (this.currentIndex.Y > 0)
                 {
-                    this.mapToCell[new Index2D(this.currentIndex.X, this.currentIndex.Y - 1)].North = true;
+                    this.mapToCell[GetIndex(this.currentIndex.X, this.currentIndex.Y - 1)].North = true;
                 }
                 if (this.currentIndex.Y < NumOfHorizontalCells)
                 {
-                    this.mapToCell[this.currentIndex].South = true;
+                    this.mapToCell[GetIndex(this.currentIndex)].South = true;
                 }
             }
             else if (str == HorizontalWallEmpty)

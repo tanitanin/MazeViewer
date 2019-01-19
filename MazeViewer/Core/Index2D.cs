@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MazeViewer.Core
 {
-    public class Index2D
+    public class Index2D : IEquatable<Index2D>
     {
         public int X { get; set; }
         public int Y { get; set; }
@@ -31,6 +31,11 @@ namespace MazeViewer.Core
                 default:
                     return false;
             }
+        }
+
+        public bool Equals(Index2D other)
+        {
+            return X == other.X && Y == other.Y;
         }
 
         public class Range : IEnumerable<Index2D>, IEnumerable

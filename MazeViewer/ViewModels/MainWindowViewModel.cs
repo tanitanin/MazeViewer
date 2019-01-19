@@ -29,7 +29,8 @@ namespace MazeViewer.ViewModels
         public double MinimumStep { get => Graph?.Edges?.Aggregate(0.0, (s, e) => { return s + e.Weight; }) ?? 0; }
 
         public int SelectedMazeFileIndex { get; set; } = 0;
-        public ObservableCollection<string> MazeFileList { get; private set; } = new ObservableCollection<string>(Directory.EnumerateFiles(@"MazeData"));
+        public ObservableCollection<string> MazeFileList { get; private set; } = new ObservableCollection<string>(Directory.EnumerateFiles(@"MazeFiles\classic"));
+        public string MazeFilePath { get => MazeFileList[SelectedMazeFileIndex]; }
 
         public Agent Agent { get; } = new Agent();
 
@@ -56,16 +57,28 @@ namespace MazeViewer.ViewModels
         {
             if (MazeFileList.Count > 0)
             {
-                var path = MazeFileList[SelectedMazeFileIndex];
+                var path = MazeFilePath;
                 using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
                 {
-                    var data = new byte[stream.Length];
-                    stream.Read(data, 0, data.Length);
-                    var mazeData = MazeData.Load(data);
-                    if (mazeData.Validate())
+                    //var data = new byte[stream.Length];
+                    //stream.Read(data, 0, data.Length);
+                    //var mazeData = MazeData.Load(data);
+                    //if (mazeData.Validate())
+                    //{
+                    //    MazeData = mazeData;
+                    //    Graph = null;
+                    //}
+                    using(var reader = new StreamReader(stream))
                     {
-                        MazeData = mazeData;
-                        Graph = null;
+                        using(var r = new MazeFileTextReader(reader))
+                        {
+                            var mazeData = r.Read();
+                            if (mazeData.Validate())
+                            {
+                                MazeData = mazeData;
+                                Graph = null;
+                            }
+                        }
                     }
                     stream.Close();
                 }

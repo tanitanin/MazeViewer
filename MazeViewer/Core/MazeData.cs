@@ -15,7 +15,7 @@ namespace MazeViewer.Core
         public int NumOfVerticalCell { get; set; } = 0;
         public List<Cell> Cells { get; private set; } = new List<Cell>();
 
-        public Cell At(int x, int y) => Cells[x * NumOfVerticalCell + y];
+        public Cell At(int x, int y) => Cells.ElementAtOrDefault(x * NumOfVerticalCell + y);
 
         public Cell Start { get => Cells.Where(c => c.IsStart).First(); }
         public IEnumerable<Cell> Goals { get => Cells.Where(c => c.IsGoal); }
@@ -27,10 +27,13 @@ namespace MazeViewer.Core
         {
             NumOfHorizontalCell = x;
             NumOfVerticalCell = y;
-            Cells = new Cell[NumOfHorizontalCell * NumOfVerticalCell].ToList();
-            foreach (var index in new Index2D.Range(NumOfHorizontalCell, NumOfVerticalCell))
+            if(x * y > 0)
             {
-                At(index.X, index.Y).Pos = index;
+                Cells = new Cell[NumOfHorizontalCell * NumOfVerticalCell].ToList();
+                foreach (var index in new Index2D.Range(NumOfHorizontalCell, NumOfVerticalCell))
+                {
+                    At(index.X, index.Y).Pos = index;
+                }
             }
         }
 

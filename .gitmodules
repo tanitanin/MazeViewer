@@ -1,3 +1,3 @@
-[submodule ".\\MazeViewer\\MazeFiles"]
-	path = .\\MazeViewer\\MazeFiles
+[submodule "MazeViewer/MazeFiles"]
+	path = MazeViewer/MazeFiles
 	url = https://github.com/micromouseonline/mazefiles

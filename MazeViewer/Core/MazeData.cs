@@ -11,9 +11,11 @@ namespace MazeViewer.Core
     public partial class MazeData
     {
         public int Size { get; set; } = 0;
+        public int NumOfHorizontalCell { get; set; } = 0;
+        public int NumOfVerticalCell { get; set; } = 0;
         public List<Cell> Cells { get; private set; } = new List<Cell>();
 
-        public Cell At(int x, int y) => Cells[x*Size+ y];
+        public Cell At(int x, int y) => Cells[x * NumOfVerticalCell + y];
 
         public Cell Start { get => Cells.Where(c => c.IsStart).First(); }
         public IEnumerable<Cell> Goals { get => Cells.Where(c => c.IsGoal); }
@@ -21,11 +23,24 @@ namespace MazeViewer.Core
         public double CellWidth { get => Consts.ActualMazeCellWidth; }
         public double WallWidth { get => Consts.ActualMazeWallWidth; }
 
+        public MazeData(int x = 0, int y = 0)
+        {
+            NumOfHorizontalCell = x;
+            NumOfVerticalCell = y;
+            Cells = new Cell[NumOfHorizontalCell * NumOfVerticalCell].ToList();
+            foreach (var index in new Index2D.Range(NumOfHorizontalCell, NumOfVerticalCell))
+            {
+                At(index.X, index.Y).Pos = index;
+            }
+        }
+
         public static MazeData Load(byte[] bytes)
         {
+            var size = (int)Math.Sqrt(bytes.Count());
             var maze = new MazeData()
             {
-                Size = (int)Math.Sqrt(bytes.Count()),
+                NumOfHorizontalCell = size,
+                NumOfVerticalCell = size,
                 Cells = bytes.Select(b => new Cell {
                     North = (b & 0x01) > 0,
                     East = (b & 0x02) > 0,
@@ -38,7 +53,7 @@ namespace MazeViewer.Core
             maze.At(0, 0).IsStart = true;
             if(maze.Cells.Where(x => x.IsGoal).Count() < 1)
             {
-                var n = maze.Size / 2;
+                var n = size / 2;
                 maze.At(n-1, n-1).IsGoal = true;
                 maze.At(n-1, n  ).IsGoal = true;
                 maze.At(n  , n-1).IsGoal = true;
@@ -51,7 +66,7 @@ namespace MazeViewer.Core
             //        maze.At(x, y).Pos = new Index2D() { X = x, Y = y };
             //    }
             //}
-            foreach(var index in new Index2D.Range(maze.Size, maze.Size))
+            foreach(var index in new Index2D.Range(maze.NumOfHorizontalCell, maze.NumOfVerticalCell))
             {
                 maze.At(index.X, index.Y).Pos = index;
             }
@@ -60,9 +75,9 @@ namespace MazeViewer.Core
 
         public bool Validate()
         {
-            for(int i=0; i < Size; ++i)
+            for(int i=0; i < NumOfHorizontalCell; ++i)
             {
-                for(int j = 0; j < Size; ++j)
+                for(int j = 0; j < NumOfVerticalCell; ++j)
                 {
                     if (j > 0)
                     {

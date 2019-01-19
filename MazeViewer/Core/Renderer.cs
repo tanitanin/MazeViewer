@@ -21,7 +21,7 @@ namespace MazeViewer.Core
                 Data = new RectangleGeometry(new System.Windows.Rect()
                 {
                     X = x * mazeData.CellWidth,
-                    Y = (mazeData.Size - y - 1) * mazeData.CellWidth,
+                    Y = (mazeData.NumOfVerticalCell - y - 1) * mazeData.CellWidth,
                     Width = mazeData.CellWidth,
                     Height = mazeData.CellWidth,
                 }),
@@ -84,8 +84,8 @@ namespace MazeViewer.Core
         {
             var canvas = new Canvas
             {
-                Width = mazeData.Size * mazeData.CellWidth,
-                Height = mazeData.Size * mazeData.CellWidth,
+                Width = mazeData.NumOfHorizontalCell * mazeData.CellWidth,
+                Height = mazeData.NumOfVerticalCell * mazeData.CellWidth,
             };
 
             // 土台
@@ -95,11 +95,11 @@ namespace MazeViewer.Core
                 Data = new RectangleGeometry(new Rect() {
                     X = 0.0,
                     Y = 0.0,
-                    Width = mazeData.Size * mazeData.CellWidth,
-                    Height = mazeData.Size * mazeData.CellWidth,
+                    Width = mazeData.NumOfHorizontalCell * mazeData.CellWidth,
+                    Height = mazeData.NumOfVerticalCell * mazeData.CellWidth,
                 }),
-                Width = mazeData.Size * mazeData.CellWidth,
-                Height = mazeData.Size * mazeData.CellWidth,
+                Width = mazeData.NumOfHorizontalCell * mazeData.CellWidth,
+                Height = mazeData.NumOfVerticalCell * mazeData.CellWidth,
             };
             canvas.Children.Add(basePath);
             
@@ -115,9 +115,9 @@ namespace MazeViewer.Core
             }
 
             // 壁
-            for (int y = 0; y < mazeData.Size; ++y)
+            for (int y = 0; y < mazeData.NumOfVerticalCell; ++y)
             {
-                for (int x = 0; x < mazeData.Size; ++x)
+                for (int x = 0; x < mazeData.NumOfHorizontalCell; ++x)
                 {
                     if (mazeData.At(x, y).North)
                     {

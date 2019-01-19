@@ -38,8 +38,8 @@ namespace MazeViewer.ViewModels
         private double scale = 1.0;
         public double Scale { get => this.scale; set => SetValue(ref this.scale, value); }
 
-        public double CanvasWidth { get => MazeData.Size * Consts.ActualMazeCellWidth; }
-        public double CanvasHeight { get => MazeData.Size * Consts.ActualMazeCellWidth; }
+        public double CanvasWidth { get => MazeData.NumOfHorizontalCell * Consts.ActualMazeCellWidth; }
+        public double CanvasHeight { get => MazeData.NumOfVerticalCell * Consts.ActualMazeCellWidth; }
 
         private int searchStep = 0;
         public int SearchStep { get => this.searchStep; set => SetValue(ref this.searchStep, value); }
@@ -117,9 +117,9 @@ namespace MazeViewer.ViewModels
             };
             var nodes = new Dictionary<Cell, Node<Point>>();
 
-            for (int x = 0; x < mazeData.Size; ++x)
+            for (int x = 0; x < mazeData.NumOfHorizontalCell; ++x)
             {
-                for (int y = 0; y < mazeData.Size; ++y)
+                for (int y = 0; y < mazeData.NumOfVerticalCell; ++y)
                 {
                     var cell = mazeData.At(x, y);
                     var node = new Node<Point>() { Data = mazeData.GetCenterPoint(x, y), Incidents = new List<Edge<Point>>() };
@@ -130,9 +130,9 @@ namespace MazeViewer.ViewModels
 
             var edges = graph.Edges;
 
-            for (int x = 0; x < mazeData.Size; ++x)
+            for (int x = 0; x < mazeData.NumOfHorizontalCell; ++x)
             {
-                for (int y = 0; y < mazeData.Size; ++y)
+                for (int y = 0; y < mazeData.NumOfVerticalCell; ++y)
                 {
                     var cell = mazeData.At(x, y);
 
@@ -176,9 +176,9 @@ namespace MazeViewer.ViewModels
             };
             var nodes = new Dictionary<(Cell, DirectionType), Node<Point>>();
 
-            for (int x = 0; x < mazeData.Size; ++x)
+            for (int x = 0; x < mazeData.NumOfHorizontalCell; ++x)
             {
-                for (int y = 0; y < mazeData.Size; ++y)
+                for (int y = 0; y < mazeData.NumOfVerticalCell; ++y)
                 {
                     var cell = mazeData.At(x, y);
                     var v_center = new Node<Point>() { Data = mazeData.GetCenterPoint(x, y), Incidents = new List<Edge<Point>>() };
@@ -197,9 +197,9 @@ namespace MazeViewer.ViewModels
 
             var edges = graph.Edges;
 
-            for (int x = 0; x < mazeData.Size; ++x)
+            for (int x = 0; x < mazeData.NumOfHorizontalCell; ++x)
             {
-                for (int y = 0; y < mazeData.Size; ++y)
+                for (int y = 0; y < mazeData.NumOfVerticalCell; ++y)
                 {
                     var cell = mazeData.At(x, y);
                     if (!cell.East)

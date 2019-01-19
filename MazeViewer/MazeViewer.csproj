@@ -60,6 +60,7 @@
     <Compile Include="Core\Consts.cs" />
     <Compile Include="Core\Index2D.cs" />
     <Compile Include="Core\MazeDataExtensions.cs" />
+    <Compile Include="Core\MazeFileTextReader.cs" />
     <Compile Include="Core\Renderer.cs" />
     <Compile Include="Core\Wall.cs" />
     <Compile Include="Core\Cell.cs" />

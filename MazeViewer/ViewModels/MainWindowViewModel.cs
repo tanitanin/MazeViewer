@@ -19,18 +19,61 @@ namespace MazeViewer.ViewModels
         public MainWindowViewModel(MainWindow mainWindow)
         {
             View = mainWindow;
+            MazeFolderList = new ObservableCollection<string>(Directory.EnumerateDirectories(@"MazeFiles"));
+            MazeFileList = new ObservableCollection<string>(Directory.EnumerateFiles(MazeFolderPath));
         }
 
+        public MazeData MazeData
+        {
+            get => this.mazeData;
+            private set => SetValueAndNotify(ref this.mazeData, value, nameof(MazeData), nameof(CanvasWidth), nameof(CanvasHeight));
+        }
         private MazeData mazeData = null;
-        public MazeData MazeData { get => this.mazeData; private set => SetValueAndNotify(ref this.mazeData, value, nameof(MazeData), nameof(CanvasWidth), nameof(CanvasHeight)); }
 
+        public Graph<Point> Graph
+        {
+            get => this.graph;
+            private set => SetValueAndNotify(ref this.graph, value, nameof(Graph), nameof(MinimumStep));
+        }
         private Graph<Point> graph = null;
-        public Graph<Point> Graph { get => this.graph; private set => SetValueAndNotify(ref this.graph, value, nameof(Graph), nameof(MinimumStep)); }
-        public double MinimumStep { get => Graph?.Edges?.Aggregate(0.0, (s, e) => { return s + e.Weight; }) ?? 0; }
 
-        public int SelectedMazeFileIndex { get; set; } = 0;
-        public ObservableCollection<string> MazeFileList { get; private set; } = new ObservableCollection<string>(Directory.EnumerateFiles(@"MazeFiles\classic"));
-        public string MazeFilePath { get => MazeFileList[SelectedMazeFileIndex]; }
+        public double MinimumStep
+        {
+            get => Graph?.Edges?.Aggregate(0.0, (s, e) => { return s + e.Weight; }) ?? 0;
+        }
+        
+        public int SelectedMazeFolderIndex
+        {
+            get => this.selectedMazeFolderIndex;
+            set
+            {
+                SetValueAndNotify(ref this.selectedMazeFolderIndex, value);
+                MazeFileList.Clear();
+                foreach(var path in Directory.EnumerateFiles(MazeFolderPath))
+                {
+                    MazeFileList.Add(path);
+                }
+                Notify(nameof(MazeFileList));
+                SelectedMazeFileIndex = 0;
+            }
+        }
+        private int selectedMazeFolderIndex = 0;
+        public ObservableCollection<string> MazeFolderList { get; private set; }
+        public string MazeFolderPath { get => MazeFolderList.ElementAtOrDefault(SelectedMazeFolderIndex); }
+
+        public int SelectedMazeFileIndex
+        {
+            get => this.selectedMazeFileIndex;
+            set
+            {
+                SetValueAndNotify(ref this.selectedMazeFileIndex, value);
+                UpdateMaze();
+            }
+        }
+        private int selectedMazeFileIndex = 0;
+
+        public ObservableCollection<string> MazeFileList { get; private set; } = new ObservableCollection<string>();
+        public string MazeFilePath { get => MazeFileList.ElementAtOrDefault(SelectedMazeFileIndex); }
 
         public Agent Agent { get; } = new Agent();
 
@@ -39,8 +82,8 @@ namespace MazeViewer.ViewModels
         private double scale = 1.0;
         public double Scale { get => this.scale; set => SetValue(ref this.scale, value); }
 
-        public double CanvasWidth { get => MazeData.NumOfHorizontalCell * Consts.ActualMazeCellWidth; }
-        public double CanvasHeight { get => MazeData.NumOfVerticalCell * Consts.ActualMazeCellWidth; }
+        public double CanvasWidth { get => MazeData?.NumOfHorizontalCell * Consts.ActualMazeCellWidth ?? 0; }
+        public double CanvasHeight { get => MazeData?.NumOfVerticalCell * Consts.ActualMazeCellWidth ?? 0; }
 
         private int searchStep = 0;
         public int SearchStep { get => this.searchStep; set => SetValue(ref this.searchStep, value); }
@@ -58,6 +101,10 @@ namespace MazeViewer.ViewModels
             if (MazeFileList.Count > 0)
             {
                 var path = MazeFilePath;
+                if (string.IsNullOrEmpty(path))
+                {
+                    return;
+                }
                 using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
                 {
                     //var data = new byte[stream.Length];

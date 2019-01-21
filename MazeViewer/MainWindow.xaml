@@ -24,7 +24,11 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <ComboBox Name="DataSelector" Grid.Column="0"
+            <ComboBox Name="FolderSelector" Grid.Column="0"
+                      ItemsSource="{Binding MazeFolderList, Converter={StaticResource PathToFileNameConverter}, Mode=OneWay}"
+                      SelectedIndex="{Binding SelectedMazeFolderIndex, Mode=TwoWay}"
+                      SelectionChanged="FolderSelector_SelectionChanged"/>
+            <ComboBox Name="DataSelector" Grid.Column="1" Margin="10,0,0,0"
                       ItemsSource="{Binding MazeFileList, Converter={StaticResource PathToFileNameConverter}, Mode=OneWay}"
                       SelectedIndex="{Binding SelectedMazeFileIndex, Mode=TwoWay}"
                       SelectionChanged="DataSelector_SelectionChanged"/>

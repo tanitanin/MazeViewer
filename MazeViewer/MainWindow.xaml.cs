@@ -44,6 +44,10 @@ namespace MazeViewer
             ViewModel.UpdateMaze();
         }
 
+        private void FolderSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+        }
+
         //private void ShowMarkCheckBox_Checked(object sender, RoutedEventArgs e)
         //{
         //    ViewModel.UpdateMaze();

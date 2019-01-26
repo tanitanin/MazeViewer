@@ -58,8 +58,13 @@ namespace MazeViewer.ViewModels
             }
         }
         private int selectedMazeFolderIndex = 0;
+
+
         public ObservableCollection<string> MazeFolderList { get; private set; }
-        public string MazeFolderPath { get => MazeFolderList.ElementAtOrDefault(SelectedMazeFolderIndex); }
+        public string MazeFolderPath
+        {
+            get => MazeFolderList.ElementAtOrDefault(SelectedMazeFolderIndex);
+        }
 
         public int SelectedMazeFileIndex
         {
@@ -73,20 +78,38 @@ namespace MazeViewer.ViewModels
         private int selectedMazeFileIndex = 0;
 
         public ObservableCollection<string> MazeFileList { get; private set; } = new ObservableCollection<string>();
-        public string MazeFilePath { get => MazeFileList.ElementAtOrDefault(SelectedMazeFileIndex); }
+        public string MazeFilePath
+        {
+            get => MazeFileList.ElementAtOrDefault(SelectedMazeFileIndex);
+        }
 
         public Agent Agent { get; } = new Agent();
 
         //public bool MarkEnabled { get; set; } = true;
 
         private double scale = 1.0;
-        public double Scale { get => this.scale; set => SetValue(ref this.scale, value); }
+        public double Scale
+        {
+            get => this.scale;
+            set => SetValue(ref this.scale, value);
+        }
 
-        public double CanvasWidth { get => MazeData?.NumOfHorizontalCell * Consts.ActualMazeCellWidth ?? 0; }
-        public double CanvasHeight { get => MazeData?.NumOfVerticalCell * Consts.ActualMazeCellWidth ?? 0; }
+        public double CanvasWidth
+        {
+            get => MazeData?.NumOfHorizontalCell * Consts.ActualMazeCellWidth ?? 0;
+        }
+
+        public double CanvasHeight
+        {
+            get => MazeData?.NumOfVerticalCell * Consts.ActualMazeCellWidth ?? 0;
+        }
 
         private int searchStep = 0;
-        public int SearchStep { get => this.searchStep; set => SetValue(ref this.searchStep, value); }
+        public int SearchStep
+        {
+            get => this.searchStep;
+            set => SetValue(ref this.searchStep, value);
+        }
 
         private bool initialized = false;
         public void InitializeData()
@@ -107,14 +130,6 @@ namespace MazeViewer.ViewModels
                 }
                 using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
                 {
-                    //var data = new byte[stream.Length];
-                    //stream.Read(data, 0, data.Length);
-                    //var mazeData = MazeData.Load(data);
-                    //if (mazeData.Validate())
-                    //{
-                    //    MazeData = mazeData;
-                    //    Graph = null;
-                    //}
                     using(var reader = new StreamReader(stream))
                     {
                         using(var r = new MazeFileTextReader(reader))
@@ -137,9 +152,6 @@ namespace MazeViewer.ViewModels
             if(MazeData != null)
             {
                 var (graph, start, goal) = MakeGraph(MazeData);
-                //var start = graph.Nodes.Where(n => n.Data == MazeData.Start)?.First() ?? null;
-                //var goal = graph.Nodes.Where(n => n.Data == MazeData.Goals.First())?.First() ?? null;
-                //var result = graph.GetMinimumPath(start, goal);
                 var result = graph.Dijkstra(start, goal);
                 if(result != null)
                 {
@@ -155,9 +167,6 @@ namespace MazeViewer.ViewModels
             if (MazeData != null)
             {
                 var (graph, start, goal) = MakeGraph2(MazeData);
-                //var start = graph.Nodes.Where(n => n.Data == MazeData.Start)?.First() ?? null;
-                //var goal = graph.Nodes.Where(n => n.Data == MazeData.Goals.First())?.First() ?? null;
-                //var result = graph.GetMinimumPath(start, goal);
                 var result = graph.Dijkstra(start, goal);
                 if (result != null)
                 {
